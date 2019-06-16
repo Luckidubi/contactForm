@@ -1,4 +1,39 @@
+<?php
+	
+	$error = ""; $successMessage = "";
+if (isset($_POST["submit"])) {
+	
+	if ($_POST["email"] && !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+  $error .= "Invalid email format<br>"; 
+}
+	if(empty($_POST["email"])) {
+		$error.= "Email address is required<br>";
+	}
 
+	if(empty($_POST["subject"])) {
+		$error.= "Email subject is required<br>";
+	}
+
+	if(empty($_POST["message"])) {
+		$error.= "Your message is required<br>";
+	}
+
+	if($error != ""){
+		$error = "<div class='alert alert-danger alert-dismissible fade show' role='alert'><strong>There are some errors in the fields below:</strong><br><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>".$error."</div>";
+	} else {
+		$emailTo = "admin@mydomain.com";
+		$subject = $_POST["subject"];
+		$message = $_POST["message"];
+		$headers = "From: ".$_POST["email"];
+		if(mail($emailTo, $subject, $message, $headers)){
+			$successMessage = "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>There are some errors in the fields below:</strong><br><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Email Sent Successfully</div>";
+		} else {
+			$error = "<div class='alert alert-danger alert-dismissible fade show' role='alert'><strong>Email Not Sent</strong><br><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
+		}
+	}
+}
+
+?>
 <!DOCTYPE html>
 <html>
 	<head>
